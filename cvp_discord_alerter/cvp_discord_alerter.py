@@ -34,7 +34,7 @@ def webhook():
         }
 
         #discord webhook URL
-        discordUrl = 'https://discordapp.com/api/webhooks/507522490424229899/FmblqryobsXfzoA50hDBrmSE_1XpiG7MsY395_8AtHo0pX-Q9Lx1p2LfQb-jTZ96OYka'
+        discordUrl = 'CHANGE ME'
 
         #in case we have multiple alerts we have to treat each of them
         for alert_id, alert in enumerate(data2['alerts']):
