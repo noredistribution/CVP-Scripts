@@ -20,9 +20,20 @@ import json
 from datetime import datetime
 import requests
 from flask import Flask, request, abort
+import argparse
+import sys
 
 app = Flask(__name__)
 
+#ask for discord webhook URL argument and exit the program if it is not given
+parser = argparse.ArgumentParser()
+parser.add_argument('--discordURL', required=True, help="discord webhook URL in the following format \n https://discordapp.com/api/webhooks/{webhook.id}/{webhook.token}")
+if len(sys.argv) < 2:
+    parser.print_help(sys.stderr)
+    sys.exit(1)        
+args = parser.parse_args()
+
+discordUrl = args.discordURL
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -32,9 +43,6 @@ def webhook():
         headers = {
             "content-type": "application/json"
         }
-
-        #discord webhook URL
-        discordUrl = 'CHANGE ME'
 
         #in case we have multiple alerts we have to treat each of them
         for alert_id, alert in enumerate(data2['alerts']):
