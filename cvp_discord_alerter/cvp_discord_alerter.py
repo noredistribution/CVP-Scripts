@@ -44,6 +44,15 @@ def webhook():
             "content-type": "application/json"
         }
 
+        #init dict for discord and init the embeds key
+        #for grouped events we will have multiple alerts
+        data3 = {}
+        data3["embeds"] = []
+        counter = len(data2['alerts'])
+        while counter != 0:
+          data3["embeds"].append({})
+          counter = counter - 1
+
         #in case we have multiple alerts we have to treat each of them
         for alert_id, alert in enumerate(data2['alerts']):
 
@@ -67,7 +76,7 @@ def webhook():
             month = date.strftime('%b')
 
             #creating dictionary for discord's accepted formatting
-            data3 = {}
+            
             data3['content'] = "**1 {} events for: {} {} {}** \n Events in this group:".format(event_status,hostname, sn, event_type)
 
             alert_title = alert['annotations']['title']
@@ -81,9 +90,8 @@ def webhook():
                 emoji = ":information_source:"
             elif sev == "ERROR":
                 emoji = ":octagonal_sign:"
-            #init embed
-            data3["embeds"]=[]
-            data3["embeds"].append({})
+
+            #add the titles for all alerts
             data3["embeds"][alert_id]["title"] = "**[{}]** {} {}, {} ({})".format(sev, emoji, alert_title, sn, hostname)
             
             #setting the embed color to red for new alert and green for resolved alerts
