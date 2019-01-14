@@ -107,7 +107,7 @@ class serverCvp(object):
 
 
     def testaaa(self):
-      '''Test AAA Server Connectivity/ TO DO: make the params customizable from CLI/add to argparse'''
+        '''Test AAA Server Connectivity/ TO DO: make the params customizable from CLI/add to argparse'''
         headers = { 'Content-Type': 'application/json'}
         getURL = "/cvpservice/aaa/testServerConnectivity.do"
         getParams= {'server':
