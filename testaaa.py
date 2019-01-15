@@ -106,26 +106,27 @@ class serverCvp(object):
         return response.json()
 
 
-    def testaaa(self):
+    def testaaa(self, AAAIP, AAASECRET, AAAAUTHMODE, AAAPORT, ACCOUNTPORT, AAATYPE, AAAUSER, AAAPASSWORD):
         '''Test AAA Server Connectivity/ TO DO: make the params customizable from CLI/add to argparse'''
         headers = { 'Content-Type': 'application/json'}
         getURL = "/cvpservice/aaa/testServerConnectivity.do"
         getParams= {'server':
-                                {"ipAddress": "10.83.12.24",
-                                 "secret": "arastra", 
-                                 "authMode": "PAP", 
+                                {"ipAddress": AAAIP,
+                                 "secret": AAASECRET, 
+                                 "authMode": AAAAUTHMODE, 
                                  "status": "enable", 
-                                 "port": 1812, 
-                                 "accountPort": 1813, 
-                                 "serverType": "RADIUS"
+                                 "port": int(AAAPORT), 
+                                 "accountPort": int(ACCOUNTPORT), 
+                                 "serverType": AAATYPE
                                  },
                     "user": {
-                              "userId": "spiderman",
-                              "password": "arista1234"
+                              "userId": AAAUSER,
+                              "password": AAAPASSWORD
                             } 
                     }
                     
         response = requests.post(self.url+getURL,cookies=self.cookies,json=getParams,verify=False)
+        print getParams
         print response.text
         return response.text
 
@@ -140,6 +141,14 @@ def parseArgs():
                         type=str.lower, help='Connect via HTTPS' )
    parser.add_argument( '--password', default=None, help='password corresponding to'
                         ' the username' )
+   parser.add_argument( '--aaaip', required=True, help='AAA Server IP')
+   parser.add_argument( '--aaasecret', required=True, help='shared secret')
+   parser.add_argument( '--authmode', required=True, help='PAP, CHAP or ASCII')
+   parser.add_argument( '--aaaport', required=True, help='AAA Server port, default 1812 for RADIUS, 49 for TACACS')
+   parser.add_argument( '--aaaaccountport', required=True, help='0 for TACACS, 1813 for RADIUS by default')
+   parser.add_argument( '--aaatype',choices=['TACACS', 'RADIUS'], help='AAA server type, choose TACACS or RADIUS')
+   parser.add_argument( '--aaauser', required=True, help='AAA username')
+   parser.add_argument( '--aaapassword', required=True, help='Password of the AAA user to be tested')
    args = parser.parse_args()
    args.port = int( args.port )
    return checkArgs( args )
@@ -167,7 +176,7 @@ def main( ):
       logOn = cvpSession.logOn()
     except serverCvpError as e:
       print"  Connnection to %s:%s" %(options.host,e.value)
-    cvpSession.testaaa()  		 
+    cvpSession.testaaa(options.aaaip, options.aaasecret, options.authmode, options.aaaport, options.aaaaccountport, options.aaatype, options.aaauser, options.aaapassword)  		 
     cvpSession.logOut
 
 if __name__ == '__main__':
