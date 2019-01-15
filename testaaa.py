@@ -131,7 +131,7 @@ class serverCvp(object):
 
 
 def parseArgs():
-   parser = argparse.ArgumentParser( description='CVP send clear counters tool' )
+   parser = argparse.ArgumentParser( description='CVP test AAA Server connectivtity' )
    parser.add_argument( '--host', default='localhost',
                         help='Hostname or IP address of cvp' )
    parser.add_argument( '--user', required=True, help='Cvp user username' )
