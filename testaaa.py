@@ -26,7 +26,7 @@
 # OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 # IF NOT ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
-# Version 0.6 14/01/2019
+# Version 0.9 14/01/2019
 #
 # Written by:
 #      Tamas Plugor, Arista Networks
