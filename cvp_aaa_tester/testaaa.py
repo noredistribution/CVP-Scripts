@@ -175,7 +175,7 @@ def main( ):
     except serverCvpError as e:
       print"  Connnection to %s:%s" %(options.host,e.value)
     # Call AAA test
-    cvpSession.testaaa(options.aaaip, options.aaasecret, options.authmode, options.aaaport, options.aaaaccountport, options.aaatype, options.aaauser, options.aaapassword)  		 
+    cvpSession.testaaa(options.aaaip, options.aaasecret, options.authmode, options.aaaport, options.aaaaccountport, options.aaatype, options.aaauser, options.aaapassword)       
     cvpSession.logOut
 
 if __name__ == '__main__':
