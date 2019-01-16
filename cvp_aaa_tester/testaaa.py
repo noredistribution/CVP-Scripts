@@ -49,8 +49,6 @@ from jsonrpclib import Server
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-
-# CVP manipulation class
 # Set up classes to interact with CVP API
 # serverCVP exception class
 
@@ -107,7 +105,7 @@ class serverCvp(object):
 
 
     def testaaa(self, AAAIP, AAASECRET, AAAAUTHMODE, AAAPORT, ACCOUNTPORT, AAATYPE, AAAUSER, AAAPASSWORD):
-        '''Test AAA Server Connectivity/ TO DO: make the params customizable from CLI/add to argparse'''
+        '''Test AAA Server Connectivity'''
         headers = { 'Content-Type': 'application/json'}
         getURL = "/cvpservice/aaa/testServerConnectivity.do"
         getParams= {'server':
@@ -176,6 +174,7 @@ def main( ):
       logOn = cvpSession.logOn()
     except serverCvpError as e:
       print"  Connnection to %s:%s" %(options.host,e.value)
+    # Call AAA test
     cvpSession.testaaa(options.aaaip, options.aaasecret, options.authmode, options.aaaport, options.aaaaccountport, options.aaatype, options.aaauser, options.aaapassword)  		 
     cvpSession.logOut
 
