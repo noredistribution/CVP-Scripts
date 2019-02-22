@@ -32,7 +32,7 @@
 #      Tamas Plugor, Arista Networks
 #
 # Tool to export all task ids as a CSV
-#
+# Tested on CVP version 2018.1.4 and 2018.2.2
 
 
 # Import Required Libraries
