@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (c) 2018 Arista Networks, Inc.  All rights reserved.
+# Copyright (c) 2019 Arista Networks, Inc.  All rights reserved.
 # Arista Networks, Inc. Confidential and Proprietary.
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -15,7 +15,8 @@
 # GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
 # LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 # DAMAGE.
-
+# -*- coding: UTF-8 -*-
+from __future__ import unicode_literals
 import json
 from datetime import datetime
 import requests
@@ -23,17 +24,18 @@ from flask import Flask, request, abort
 import argparse
 import sys
 
+
 app = Flask(__name__)
 
-# ask for discord webhook URL argument and exit the program if it is not given
+# ask for GHC webhook URL argument and exit the program if it is not given
 parser = argparse.ArgumentParser()
-parser.add_argument('--discordURL', required=True, help="discord webhook URL in the following format \n https://discordapp.com/api/webhooks/{webhook.id}/{webhook.token}")
+parser.add_argument('--ghcURL', required=True, help="GHC webhook URL")
 if len(sys.argv) < 2:
     parser.print_help(sys.stderr)
     sys.exit(1)        
 args = parser.parse_args()
 
-discordUrl = args.discordURL
+ghcUrl = args.ghcURL
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -44,17 +46,17 @@ def webhook():
             "content-type": "application/json"
         }
 
-        # init dict for discord and init the embeds key
+        # init dict for GHC and init the cards key
         # for grouped events we will have multiple alerts
-        data3 = {}
-        data3["embeds"] = []
+        ghc = {}
+        ghc["cards"] = []
         counter = len(data2['alerts'])
         while counter != 0:
-          data3["embeds"].append({})
+          ghc["cards"].append({})
           counter = counter - 1
 
         # in case we have multiple alerts we have to treat each of them
-        for alert_id, alert in enumerate(data2['alerts']):
+        for eaid, alert in enumerate(data2['alerts']):
 
             if alert['status'] == 'firing':
                     event_status = 'new'
@@ -65,7 +67,7 @@ def webhook():
             elif 'tag_hostname' in alert['labels']:
                     hostname = alert['labels']["tag_hostname"]
             else:
-                    hostname = ""
+                hostname = ""
             if 'deviceId' in alert['labels']:
                     sn = alert['labels']['deviceId']
             else:
@@ -76,31 +78,39 @@ def webhook():
             date = datetime.strptime(startsAt,'%Y-%m-%dT%H:%M:%SZ')
             month = date.strftime('%b')
 
-            # creating dictionary for discord's accepted formatting
+            # creating dictionary for GHC's accepted formatting
+            ghc['cards'][eaid]['header'] = {}
+            ghc['cards'][eaid]['sections'] = []
+            ghc['cards'][eaid]['sections'].append({})
+            ghc['cards'][eaid]['sections'][0]['widgets'] = []
+            ghc['cards'][eaid]['sections'][0]['widgets'].append({})
+            ghc["cards"][eaid]["sections"][0]['widgets'][0]['keyValue'] = {}
+            ghc["cards"][eaid]["sections"][0]['widgets'][0]['buttons'] = []
             
-            data3['content'] = "**1 {} events for: {} {} {}** \n Events in this group:".format(event_status,hostname, sn, event_type)
-
+            if event_status == 'new':
+                event_title = "<b><font color=\"#ff0000\">1 {} events for: {} {} {}</font></b>".format(event_status,hostname, sn, event_type)
+            elif event_status == "resolved":
+                event_title = "<b><font color=\"#0C9503\">1 {} events for: {} {} {}</font></b>".format(event_status,hostname, sn, event_type)
+            
+            ghc['cards'][eaid]['header']['title'] = event_title
+            ghc['cards'][eaid]['header']['subtitle'] = "Events in this group:"
             alert_title = alert['annotations']['title']
+            
             # setting emoji for severities
             emoji = ""
             if sev == "CRITICAL":
-                emoji = ":fire:"
+                emoji = "\uD83D\uDD25"
             elif sev == "WARNING":
-                emoji = ":warning:"
+                emoji = "\u26A0\uFE0F"
             elif sev == "INFO":
-                emoji = ":information_source:"
+                emoji = "\u2139"
             elif sev == "ERROR":
-                emoji = ":octagonal_sign:"
+                emoji = "\uD83D\uDED1"
 
             # add the titles for all alerts
-            data3["embeds"][alert_id]["title"] = "**[{}]** {} {}, {} ({})".format(sev, emoji, alert_title, sn, hostname)
+            ghc_alert = u"<b>[{}]</b> {} {}, {} <b><font color=\"#0000ff\">({})</font></b>".format(sev, emoji, alert_title, sn, hostname)
             
-            # setting the embed color to red for new alert and green for resolved alerts
-            if event_status == 'new':
-                    data3["embeds"][alert_id]["color"] = 12845619
-            else:
-                    data3["embeds"][alert_id]["color"] = 4444444
-
+            # create the dictionary with timestamps
             args = {
                             'arg0': alert['annotations']['description'],
                             'arg1': date.day,
@@ -108,18 +118,31 @@ def webhook():
                             'arg3': date.year,
                             'arg4': date.hour,
                             'arg5': date.minute,
-                            'arg6': date.second,
-                            'arg7': alert['generatorURL']
+                            'arg6': date.second 
                             }
 
-            data3["embeds"][alert_id]["description"]= '''
-            Description: {arg0}
-            Started: {arg1} {arg2} {arg3} {arg4}:{arg5}:{arg6}
-            Source: {arg7}'''.format(**args)
+            ghc["cards"][eaid]["sections"][0]['widgets'][0]['keyValue']['content']= ("{} <br>"
+            "<b>Description:</b> {arg0}<br>"
+            "<b>Started:</b> {arg1} {arg2} {arg3} {arg4}:{arg5}:{arg6}").format(ghc_alert,**args)
+            ghc["cards"][eaid]["sections"][0]['widgets'][0]['keyValue']['contentMultiline'] = 'true'
 
-            print data3
-        data5 = json.dumps(data3)
-        r = requests.post(discordUrl, data=data5, headers=headers)
+
+            ghc['cards'][eaid]['sections'][0]['widgets'][0]["buttons"] = [
+                    {
+                      "textButton": {
+                        "text": "Open event",
+                        "onClick": {
+                          "openLink": {
+                            "url": alert['generatorURL']
+                          }
+                        }
+                      }
+                    }
+                  ]
+
+            print ghc
+        resp = json.dumps(ghc)
+        r = requests.post(ghcUrl, data=resp, headers=headers)
         return ""
     else:
         abort(400)
