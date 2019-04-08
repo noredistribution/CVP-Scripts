@@ -97,8 +97,8 @@ def createCSV(dict):
             # make API call to get the system MAC for the dataset
             response2 = requests.get(cvpIP + restAPI + dataset + sysmacpath, cookies=cookies, verify=False)
             response2 = response2.json()
-            #print "Dataset ID: {}".format(dataset)
-            pp(response2)
+            # print "Dataset ID: {}".format(dataset)
+            # pp(response2)
             
             for i in response2['notifications']:
                 if 'systemMacAddr' in i['updates']:
@@ -113,7 +113,7 @@ def createCSV(dict):
             
             response3 = requests.get(cvpIP + restAPI + dataset + sysmacpath + modeltype, cookies=cookies, verify=False)
             response3 = response3.json()
-            #pp(response3)
+            # pp(response3)
             for mdl in response3['notifications']:
                 if 'modelName' in mdl['updates']:
                     model = mdl['updates']['modelName']['value']
