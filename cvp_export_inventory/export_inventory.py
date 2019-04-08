@@ -93,11 +93,12 @@ def createCSV(dict):
             # Path for system MAC
             sysmacpath = '/Sysdb/hardware/entmib'
             dataset = key['updates'].values()[0]['key']
+            print "dateset is:", dataset
             # make API call to get the system MAC for the dataset
             response2 = requests.get(cvpIP + restAPI + dataset + sysmacpath, cookies=cookies, verify=False)
             response2 = response2.json()
             #print "Dataset ID: {}".format(dataset)
-            #pp(response2)
+            pp(response2)
             
             for i in response2['notifications']:
                 if 'systemMacAddr' in i['updates']:
@@ -112,11 +113,14 @@ def createCSV(dict):
             
             response3 = requests.get(cvpIP + restAPI + dataset + sysmacpath + modeltype, cookies=cookies, verify=False)
             response3 = response3.json()
-            
+            #pp(response3)
+            for mdl in response3['notifications']:
+                if 'modelName' in mdl['updates']:
+                    model = mdl['updates']['modelName']['value']
             # populating the rows
             writer.writerow({'Device': key['updates'].values()[0]['value']['hostname'], 
                             'Status': key['updates'].values()[0]['value']['status'],
-                            'Model': response3['notifications'][0]['updates']['modelName']['value'],
+                            'Model': model,
                             'EOS': key['updates'].values()[0]['value']['eosVersion'],
                             'TerminAttr': key['updates'].values()[0]['value']['terminAttrVersion'],
                             'MAC Address': mac_addr,
