@@ -12,4 +12,4 @@ python cvp_teams_alerter.py --teamsURL <MS Teams webhook URL>
 
 ### Example card
 
-![Alt text](cvp_teams_alerter/teamsalert.png)
+![Alt text](https://github.com/noredistribution/CVP-Scripts/blob/master/cvp_teams_alerter/teamsalert.png?raw=true)
