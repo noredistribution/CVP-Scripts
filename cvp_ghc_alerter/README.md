@@ -10,6 +10,8 @@ python cvp_ghc_alert --ghcURL <GHC webhook URL>
 
 ```
 
+On CVP go to the **Events** page --> Configure Notifications/Event Alerts --> Receivers and add a new receiver with a Webhook configuration and point it to your apps URL: http://x.x.x.x:5001/webhook
+
 ### Example card
 
 ![Alt text](https://github.com/noredistribution/CVP-Scripts/blob/master/cvp_ghc_alerter/cvpghcalertcard.png?raw=true)
