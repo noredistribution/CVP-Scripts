@@ -1,0 +1,33 @@
+{'cards': [{
+	'header':  {
+		'title': ''},
+		'sections': [
+			{'widgets': [
+				{ 'textParagraph':{"text": '<b><font color="#ff0000">1 new events for: switch1 <br> XXXXXXXXXX <br> DEVICE_INTF_ERR_SMART</font></b> <br> Events in this group:'}
+				}]
+
+			},
+			{
+			'widgets': [{
+				'buttons': [{
+					'textButton': {
+						'text': 'Open event',
+						'onClick': {
+							'openLink': {
+								'url': 'https://10.83.12.79/cv/events/e4e394d48497449d/1583728590389'
+							}
+						}
+					}
+				}
+				],
+				'keyValue': {
+							'content': '<b>[WARNING]</b> \u26a0\ufe0f Interface went down unexpectedly, ZZZ9999999 <b><font color="#0000ff">(switch1)</font></b> <br><b>Description:</b> Interface Ethernet1/4 on ZZZ9999999 is no longer operationally active<br><b>Started:</b> 9 Mar 2020 4:36:30',
+							'contentMultiline': 'true'
+				}
+			}
+			]
+		}
+		]
+ }
+ ]
+}

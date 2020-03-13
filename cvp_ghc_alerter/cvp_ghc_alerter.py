@@ -4,12 +4,12 @@
 
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
 # * Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-# * Redistributions in binary form must reproduce the above copyright notice,  this list of conditions and the following disclaimer in the documentation 
+# * Redistributions in binary form must reproduce the above copyright notice,  this list of conditions and the following disclaimer in the documentation
 #   and/or other materials provided with the distribution.
-# * Neither the name of the Arista nor the names of its contributors may be used to endorse or promote products derived from this software without 
+# * Neither the name of the Arista nor the names of its contributors may be used to endorse or promote products derived from this software without
 #   specific prior written permission.
-# 
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, 
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
 # THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS
 # BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
 # GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
@@ -32,7 +32,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--ghcURL', required=True, help="GHC webhook URL")
 if len(sys.argv) < 2:
     parser.print_help(sys.stderr)
-    sys.exit(1)        
+    sys.exit(1)
 args = parser.parse_args()
 
 ghcUrl = args.ghcURL
@@ -82,20 +82,25 @@ def webhook():
             ghc['cards'][eaid]['header'] = {}
             ghc['cards'][eaid]['sections'] = []
             ghc['cards'][eaid]['sections'].append({})
+            ghc['cards'][eaid]['sections'].append({})
             ghc['cards'][eaid]['sections'][0]['widgets'] = []
             ghc['cards'][eaid]['sections'][0]['widgets'].append({})
-            ghc["cards"][eaid]["sections"][0]['widgets'][0]['keyValue'] = {}
-            ghc["cards"][eaid]["sections"][0]['widgets'][0]['buttons'] = []
-            
+            ghc["cards"][eaid]["sections"][0]['widgets'][0]['textParagraph'] = {}
+            ghc["cards"][eaid]["sections"][0]['widgets'][0]['textParagraph']['text'] = {}
+            ghc['cards'][eaid]['sections'][1]['widgets'] = []
+            ghc['cards'][eaid]['sections'][1]['widgets'].append({})
+            ghc["cards"][eaid]["sections"][1]['widgets'][0]['keyValue'] = {}
+            ghc["cards"][eaid]["sections"][1]['widgets'][0]['buttons'] = []
+
             if event_status == 'new':
-                event_title = "<b><font color=\"#ff0000\">1 {} events for: {} {} {}</font></b>".format(event_status,hostname, sn, event_type)
+                event_title = "<b><font color=\"#ff0000\">1 {} events for: {} <br> {} <br> {}</font></b> <br> Events in this group:".format(event_status,hostname, sn, event_type)
             elif event_status == "resolved":
-                event_title = "<b><font color=\"#0C9503\">1 {} events for: {} {} {}</font></b>".format(event_status,hostname, sn, event_type)
-            
-            ghc['cards'][eaid]['header']['title'] = event_title
-            ghc['cards'][eaid]['header']['subtitle'] = "Events in this group:"
+                event_title = "<b><font color=\"#0C9503\">1 {} events for: {} <br> {} <br> {}</font></b> <br> Events in this group:".format(event_status,hostname, sn, event_type)
+
+            ghc['cards'][eaid]['header']['title'] = ''
+            #ghc['cards'][eaid]['header']['subtitle'] = "Events in this group:"
             alert_title = alert['annotations']['title']
-            
+
             # setting emoji for severities
             emoji = ""
             if sev == "CRITICAL":
@@ -109,7 +114,7 @@ def webhook():
 
             # add the titles for all alerts
             ghc_alert = u"<b>[{}]</b> {} {}, {} <b><font color=\"#0000ff\">({})</font></b>".format(sev, emoji, alert_title, sn, hostname)
-            
+
             # create the dictionary with timestamps
             args = {
                             'arg0': alert['annotations']['description'],
@@ -118,16 +123,16 @@ def webhook():
                             'arg3': date.year,
                             'arg4': date.hour,
                             'arg5': date.minute,
-                            'arg6': date.second 
+                            'arg6': date.second
                             }
-
-            ghc["cards"][eaid]["sections"][0]['widgets'][0]['keyValue']['content']= ("{} <br>"
+            ghc["cards"][eaid]["sections"][0]['widgets'][0]['textParagraph']['text'] = event_title
+            ghc["cards"][eaid]["sections"][1]['widgets'][0]['keyValue']['content']= ("{} <br>"
             "<b>Description:</b> {arg0}<br>"
             "<b>Started:</b> {arg1} {arg2} {arg3} {arg4}:{arg5}:{arg6}").format(ghc_alert,**args)
-            ghc["cards"][eaid]["sections"][0]['widgets'][0]['keyValue']['contentMultiline'] = 'true'
+            ghc["cards"][eaid]["sections"][1]['widgets'][0]['keyValue']['contentMultiline'] = 'true'
 
 
-            ghc['cards'][eaid]['sections'][0]['widgets'][0]["buttons"] = [
+            ghc['cards'][eaid]['sections'][1]['widgets'][0]["buttons"] = [
                     {
                       "textButton": {
                         "text": "Open event",
