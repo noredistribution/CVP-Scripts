@@ -15,3 +15,13 @@ On CVP go to the **Events** page --> Configure Notifications/Event Alerts --> Re
 ### Example card
 
 ![Alt text](https://github.com/noredistribution/CVP-Scripts/blob/master/cvp_ghc_alerter/cvpghcalertcard.png?raw=true)
+
+### Run it as docker container
+
+1\. Build the image from the Dockerfile
+
+`dockebuild -f Dockerfile -t ghcalerter:latest .`
+
+2\. Run container with the webhook URL as an argument
+
+`docker run  -p 5001:5001 ghcalerter '<COPY WEBHOOK URL HERE>'`
