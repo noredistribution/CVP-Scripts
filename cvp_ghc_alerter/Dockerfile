@@ -12,7 +12,7 @@ COPY /cvp_ghc_alerter/requirements.txt /ghcalert/src
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copying src code to Container
-COPY /cvp_ghc_alerter/* /ghcalert/src/app
+COPY /cvp_ghc_alerter/* /ghcalert/src/app/
 
 # Application Environment variables
 ENV APP_ENV development
