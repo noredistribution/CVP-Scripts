@@ -20,7 +20,7 @@ On CVP go to the **Events** page --> Configure Notifications/Event Alerts --> Re
 
 1\. Build the image from the Dockerfile
 
-`dockebuild -f Dockerfile -t ghcalerter:latest .`
+`docker build -f Dockerfile -t ghcalerter:latest .`
 
 2\. Run container with the webhook URL as an argument
 
