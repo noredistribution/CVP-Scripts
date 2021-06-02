@@ -25,6 +25,7 @@ import requests
 from flask import Flask, request, abort
 import argparse
 import sys
+import copy
 
 app = Flask(__name__)
 
@@ -53,26 +54,32 @@ def webhook():
             "@context": "http://schema.org/extensions",
             "themeColor": "0076D7",
             "summary": "",
-            "sections": [{
-                "activityTitle": "",
-                "activitySubtitle": "",
-                "activityImage": "https://titaniumcustomprinting.co.uk/wp-content/uploads/2019/04/Batman-Old-Logo-White.png",
-                "facts": [{
-                    "name": "Description",
-                    "value": ""
-                }, {
-                    "name": "Started",
-                    "value": ""
-                }, {
-                    "name": "Source",
-                    "value": ""
-                }],
-                "markdown": True
+            "sections": [
+            ]
+        }
+
+        teamsdata_section = {
+            "activityTitle": "",
+            "activitySubtitle": "",
+            "activityImage": "https://repository-images.githubusercontent.com/197042746/81e45880-0678-11eb-9423-a91dce14f372",
+            "activityImageType": "article",
+            "facts": [{
+                "name": "Description",
+                "value": ""
+            }, {
+                "name": "Started",
+                "value": ""
+            }, {
+                "name": "Source",
+                "value": ""
             }],
+            "markdown": True
         }
         
         # in case we have multiple alerts we have to treat each of them
         for alert_id, alert in enumerate(data2['alerts']):
+
+            teamsdata['sections'].append(copy.deepcopy(teamsdata_section))
 
             if alert['status'] == 'firing':
                     event_status = 'new'
