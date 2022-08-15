@@ -4,8 +4,8 @@
 
 <pre>
 <b># python export_inventory.py</b>                                
-CVP IP: 10.83.13.79
-CVP username: cvpadmin
+CVP IP: 192.0.2.79
+CVP username: arista
 Password:
 Inventory is getting written to CSV
 CSV file inventory20190228-004942.csv has been generated in your local directory

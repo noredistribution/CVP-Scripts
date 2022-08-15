@@ -36,7 +36,7 @@ def parseArgs():
    parser = argparse.ArgumentParser()
    parser.add_argument( '-c', '--cvpName', required=True, help='cvp name' )
    parser.add_argument( '-u', '--userId', help='username',
-           default='cvpadmin')
+           default='arista')
    parser.add_argument( '-p', '--password', help='password',
            default='arista')
    args = vars( parser.parse_args() )

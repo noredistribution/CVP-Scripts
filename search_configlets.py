@@ -14,7 +14,7 @@ import cvp
 server = cvp.Cvp("localhost")
 
 #change the credentials 
-username = "cvpadmin"
+username = "arista"
 password = "arista"
 
 #authentication

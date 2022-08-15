@@ -4,7 +4,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 from pprint import pprint as pp
-cvpIP = 'https://10.83.13.33'
+cvpIP = 'https://192.0.2.10'
 
 headers = { 'Content-Type': 'application/json'}
 
@@ -13,8 +13,8 @@ headers = { 'Content-Type': 'application/json'}
 loginURL = "/web/login/authenticate.do"
 
 # cvp user and password
-USER = 'cvpadmin'
-PASSWORD = 'arastra'
+USER = 'arista'
+PASSWORD = 'arista'
 
 # First we have to login and save the session in a cookie
 # which can be later referred to make API calls

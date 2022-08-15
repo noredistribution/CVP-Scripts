@@ -4,11 +4,11 @@ ssl._create_default_https_context = ssl._create_unverified_context
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-host = '10.83.13.33'
+host = '192.0.2.10'
 
 
 d = cvp.Cvp(host,True,443)
-d.authenticate('cvpadmin','arastra')
+d.authenticate('arista','arista')
 container = d.getContainer('Tommy test')
 configletBuilder = d.getConfiglet("sys_telemetrybuilderv2")
 
@@ -21,5 +21,5 @@ d.mapConfigletToContainer(container,[configletBuilder])
 d.generateConfigletForContainer(container, configletBuilder, devicesList=None, inputs=None)
 
 # Result:
-# [Configlet "SYS_TelemetryBuilderV2_10.83.13.140_1", Configlet "SYS_TelemetryBuilderV2_10.83.13.132_2"]
+# [Configlet "SYS_TelemetryBuilderV2_192.0.2.140_1", Configlet "SYS_TelemetryBuilderV2_192.0.2.132_2"]
 

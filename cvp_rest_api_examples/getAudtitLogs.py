@@ -20,9 +20,9 @@ def parseArgs():
    parser = argparse.ArgumentParser()
    parser.add_argument( '-c', '--cvpName', required=True, help='cvp name' )
    parser.add_argument( '-u', '--userId', help='username',
-           default='cvpadmin')
+           default='arista')
    parser.add_argument( '-p', '--password', help='password',
-           default='arastra')
+           default='arista')
    args = vars( parser.parse_args() )
    return args.pop( 'cvpName' ), args
 
@@ -39,7 +39,7 @@ def getAuditLogs( cvpName, start, end):
            "dataSize": 1000,
            "startTime": start,
            "endTime": end,
-           "objectKey": "cvpadmin"
+           "objectKey": "arista"
         }
    print 'calling url: ', url
    #response = [json.dumps()]

@@ -14,7 +14,7 @@
 						'text': 'Open event',
 						'onClick': {
 							'openLink': {
-								'url': 'https://10.83.12.79/cv/events/e4e394d48497449d/1583728590389'
+								'url': 'https://192.0.2.10/cv/events/e4e394d48497449d/1583728590389'
 							}
 						}
 					}
